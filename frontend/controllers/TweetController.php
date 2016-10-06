@@ -1,9 +1,11 @@
 <?php
 namespace frontend\controllers;
 
-use common\models\Tweet;
+use common\models\Tweets;
 use Yii;
+use yii\helpers\Url;
 use yii\web\Controller;
+use common\models\LoginForm;
 
 
 /**
@@ -38,25 +40,67 @@ class TweetController extends Controller
      */
     public function actionIndex()
     {
-        $tweets = Tweet::find()->all();
+
+        $tweets = Tweets::getAllTweets();
+
+        $model = new Tweets();
+
+        $post = Yii::$app->request->post("Tweets");
+        if($post){
+
+            $model->text = $post["text"];
+            $model->user_id = Yii::$app->user->id;
+            if($model->save()){
+                //$model = new Tweets();
+                return $this->redirect(Url::to(['tweet/index']));
+
+            }
+        }
 
         return $this->render('index',[
-            'tweets' => $tweets
+            'tweets' => $tweets,
+            'model'=> $model
 
         ]);
     }
+
+
 
     public function actionOne()
     {
         $id = Yii::$app->request->get('id');
         if ($id) {
-            $tweets[] = Tweet::find()->where(['id' => $id])->one();
+            $tweets[] = Tweets::find()->where(['id' => $id])->one();
         }
         else $tweets = [];
-
-        return $this->render('index',[
-            'tweets' => $tweets
+        $model = new Tweets();
+        return $this->render('one',[
+            'tweets' => $tweets,
+            'model' => $model
 
         ]);
+    }
+
+    public function actionLogin()
+    {
+        if (!Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
+        $model = new LoginForm();
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            return $this->goBack();
+        } else {
+            return $this->render('login', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+    public function actionLogout()
+    {
+        Yii::$app->user->logout();
+
+        return $this->goHome();
     }
 }

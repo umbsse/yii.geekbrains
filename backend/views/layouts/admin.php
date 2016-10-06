@@ -3,9 +3,9 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 use yii\helpers\Html;
-use backend\assets\TweetAsset;
+use backend\assets\AdminAsset;
 
-TweetAsset::register($this);
+AdminAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -26,10 +26,11 @@ TweetAsset::register($this);
 <html>
 
 <body>
+<?php if(!Yii::$app->user->isGuest){?>
 <div id="theme-wrapper">
     <header class="navbar" id="header-navbar">
         <div class="container">
-            <a href="index.html" id="logo" class="navbar-brand">
+            <a href="<?= \yii\helpers\Url::to(['tweet/index']) ?>" id="logo" class="navbar-brand">
                 <img src="img/logo.png" alt="" class="normal-logo logo-white"/>
                 <img src="img/logo-black.png" alt="" class="normal-logo logo-black"/>
                 <img src="img/logo-small.png" alt="" class="small-logo hidden-xs hidden-sm hidden"/>
@@ -76,13 +77,59 @@ TweetAsset::register($this);
         <div class="row">
             <div id="nav-col">
                 <section id="col-left" class="col-left-nano">
-                  MENU
+                    <div id="col-left-inner" class="col-left-nano-content">
+                        <div id="user-left-box" class="clearfix hidden-sm hidden-xs dropdown profile2-dropdown">
+                            <img alt="" src="img/samples/scarlet-159.png" />
+                            <div class="user-box">
+									<span class="name">
+										<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+											<?=Yii::$app->user->identity->username ?>
+											<i class="fa fa-angle-down"></i>
+										</a>
+										<ul class="dropdown-menu">
+											<li><a href="user-profile.html"><i class="fa fa-user"></i>Profile</a></li>
+											<li><a href="#"><i class="fa fa-cog"></i>Settings</a></li>
+											<li><a href="#"><i class="fa fa-envelope-o"></i>Messages</a></li>
+											<li><a href="<?= \yii\helpers\Url::to(['site/logout']) ?>" data-method="post"><i class="fa fa-power-off"></i>Logout</a></li>
+										</ul>
+									</span>
+                                <span class="status">
+										<i class="fa fa-circle"></i> Online
+									</span>
+                            </div>
+                        </div>
+                        <div class="collapse navbar-collapse navbar-ex1-collapse" id="sidebar-nav">
+                            <ul class="nav nav-pills nav-stacked">
+                                <li class="nav-header nav-header-first hidden-sm hidden-xs">
+                                    Navigation
+                                </li>
+                                <li>
+                                    <a href="<?= \yii\helpers\Url::to(['tweet/index']) ?>">
+                                        <i class="fa fa-dashboard"></i>
+                                        <span>Tweets</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="<?= \yii\helpers\Url::to(['users/index']) ?>">
+                                        <i class="fa fa-table"></i>
+                                        <span>Users</span>
+                                    </a>
+                                 </li>
+                            </ul>
+                        </div>
+                    </div>
                 </section>
                 <div id="nav-col-submenu"></div>
             </div>
+
+
+
+
+
             <div id="content-wrapper">
+
                 <div class="row">
-                    <?= $content;?>
+                                    <?= $content;?>
                 </div>
 
                 <footer id="footer-bar" class="row">
@@ -186,6 +233,10 @@ TweetAsset::register($this);
 
 
 <?php $this->endBody() ?>
+<?php }
+else echo $content;
+
+?>
 </body>
 </html>
 <?php $this->endPage() ?>

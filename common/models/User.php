@@ -12,6 +12,7 @@ use yii\web\IdentityInterface;
  *
  * @property integer $id
  * @property string $username
+ * @property integer privileges
  * @property string $password_hash
  * @property string $password_reset_token
  * @property string $email
@@ -24,12 +25,17 @@ use yii\web\IdentityInterface;
 class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
+    const STATUS_BANNED = 5;
     const STATUS_ACTIVE = 10;
 
+    const ACCESS_ADMIN = 1;
+    const ACCESS_USER = 0;
 
     /**
      * @inheritdoc
      */
+    public static $admins = true;
+
     public static function tableName()
     {
         return '{{%user}}';
@@ -53,6 +59,7 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            ['privileges', 'in', 'range' => [self::ACCESS_USER, self::ACCESS_ADMIN]],
         ];
     }
 
@@ -126,6 +133,11 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->getPrimaryKey();
     }
 
+    public function getPrivileges()
+    {
+        return $this->privileges;
+    }
+
     /**
      * @inheritdoc
      */
@@ -186,4 +198,16 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+
+
+    public static function isUserAdmin($username)
+    {
+        if (static::findOne(['username' => $username, 'privileges' => self::ACCESS_ADMIN]))
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

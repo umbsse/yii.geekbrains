@@ -14,7 +14,11 @@ class SiteController extends Controller
 {
     /**
      * @inheritdoc
+     *
      */
+
+    public $layout = "admin.php";
+
     public function behaviors()
     {
         return [
@@ -29,7 +33,7 @@ class SiteController extends Controller
                         'actions' => ['logout', 'index'],
                         'allow' => true,
                         'roles' => ['@'],
-                    ],
+                    ]
                 ],
             ],
             'verbs' => [
@@ -68,7 +72,7 @@ class SiteController extends Controller
      *
      * @return string
      */
-    public function actionLogin()
+    /*public function actionLogin()
     {
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
@@ -82,8 +86,22 @@ class SiteController extends Controller
                 'model' => $model,
             ]);
         }
-    }
+    }*/
+    public function actionLogin()
+    {
+        if (!\Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
 
+        $model = new LoginForm();
+        if ($model->load(Yii::$app->request->post()) && $model->loginAdmin()) {
+            return $this->goBack();
+        } else {
+            return $this->render('login', [
+                'model' => $model,
+            ]);
+        }
+    }
     /**
      * Logout action.
      *

@@ -2,8 +2,13 @@
 
 /* @var $this \yii\web\View */
 /* @var $content string */
+
 use yii\helpers\Html;
 use frontend\assets\TweetAsset;
+use yii\bootstrap\Nav;
+use yii\bootstrap\NavBar;
+use common\models\User;
+use yii\helpers\Url;
 
 TweetAsset::register($this);
 ?>
@@ -33,20 +38,13 @@ TweetAsset::register($this);
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.html"><i class="material-icons">&#xE871;</i> Material Blog</a>
+            <a class="navbar-brand" href="index.php"><i class="material-icons">&#xE871;</i> Yii2 Tweets</a>
         </div>
+
         <div class="navbar-collapse collapse navbar-responsive-collapse">
             <ul class="nav navbar-nav">
                 <li class="active dropdown">
-                    <a href="bootstrap-elements.html" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Stories <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="home-fashion.html">Fashion</a></li>
-                        <li><a href="home-food.html">Food</a></li>
-                        <li><a href="home-music.html">Music</a></li>
-                        <li><a href="home-photography.html">Photography</a></li>
-                        <li><a href="home-technology.html">Technology</a></li>
-                        <li><a href="home-travel.html">Travel</a></li>
-                    </ul>
+                    <a href="<?=Url::to(['user/feed']) ?>">My Feed </a>
                 </li>
                 <li class="dropdown">
                     <a href="bootstrap-elements.html" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Filters <b class="caret"></b></a>
@@ -56,7 +54,7 @@ TweetAsset::register($this);
                         <li><a href="filter-date.html">Date</a></li>
                     </ul>
                 </li>
-                <li class="dropdown">
+                <!------<li class="dropdown">
                     <a href="bootstrap-elements.html" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Post <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="post-image.html">Image post</a></li>
@@ -77,12 +75,23 @@ TweetAsset::register($this);
                         <li><a href="doc-tables.html">Tables</a></li>
                         <li><a href="doc-typography.html">Typography</a></li>
                     </ul>
-                </li>
+                </li>------>
             </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+            <ul class="nav navbar-nav navbar-right bold">
+                <!-----<li><a href="#"><i class="fa fa-facebook"></i></a></li>
                 <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                <li><a href="#"><i class="fa fa-twitter"></i></a></li>---->
+                <?php
+                if (Yii::$app->user->isGuest) {?>
+                    <li><a href="<?= \yii\helpers\Url::to(['user/signup']) ?>"> <b>Signup</b></a></li>
+                    <li><a href="<?= \yii\helpers\Url::to(['user/login']) ?>"> <b>Login</b></a></li>
+                <?php
+                } else {
+                ?>
+                    <li><a href="<?= \yii\helpers\Url::to(['user/logout']) ?>" data-method="post"><b> Logout <?=Yii::$app->user->identity->username ?> </b></a></li>
+                <?php
+                }
+                ?>
             </ul>
         </div>
     </div>

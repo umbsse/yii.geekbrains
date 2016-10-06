@@ -2,19 +2,19 @@
 namespace backend\controllers;
 
 use common\models\Tweet;
+use common\models\Tweets;
 use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
 use common\models\User;
-use common\models\Tweets;
 use yii\helpers\Url;
 
 /**
  * Site controller
  */
-class TweetController extends Controller
+class UsersController extends Controller
 {
     /**
      * @inheritdoc
@@ -64,48 +64,53 @@ class TweetController extends Controller
     public function actionIndex()
     {
 
-        $tweets = Tweets::find()
-            ->joinWith('user')
-            ->all();
-
-        $model = new Tweets();
-
-        /*$post = Yii::$app->request->post("Tweets");
-        if($post){
-
-            $model->text = $post["text"];
-            $model->user_id = Yii::$app->user->id;
-            if($model->save()){
-                //$model = new Tweets();
-                return $this->redirect(Url::to(['tweet/index']));
-
-            }
-        }*/
+        $users = User::find()->all();
 
         return $this->render('index',[
-            'tweets' => $tweets,
-            'model'=> $model
-
-        ]);
+                "users"=>$users
+            ]);
     }
 
     public function actionDelete($id = null, $confirm = null)
     {
 
-        if (!$id) {
+        //$id = Yii::$app->request->get('id');
+        //$confirm = Yii::$app->request->get('confirm');
 
+        if ($id) {
+
+            $user = User::findOne($id);
+            $tweets = Tweets::find()->where(['user_id'=>$id])->all();
+
+        }
+        else{
             throw new \yii\web\NotFoundHttpException();
         }
 
         if (($id)&&($confirm === 'yes')) {
 
-            $tweet = Tweets::findOne($id);
-            $tweet->delete();
+            foreach ($tweets as $t){
 
-            return $this->redirect(Url::to(['tweet/index']));
+                $t->delete();
+            }
+
+            $user->delete();
+            return $this->redirect(Url::to(['users/index']));
         }
         return $this->render('delete',[
             'id'=>$id,
+            'user'=>$user,
+            'count_tweets'=>count($tweets)
+            ]);
+    }
+
+    public function actionBan()
+    {
+
+        $users = User::find()->all();
+
+        return $this->render('index',[
+            "users"=>$users
         ]);
     }
 

@@ -14,33 +14,6 @@ $this->title = 'Yii Tweets';
 
 
 ?>
-<?php
-if (!Yii::$app->user->isGuest) {?>
-<section class="blog-post">
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="blog-post-content">
-            <?php
-                $form = ActiveForm::begin([
-                    'id' => 'tweet-form',
-                    'options' => ['class' => 'form-horizontal'],
-                ]);
-                ?>
-                <?= $form->field($model,'text')->textInput() ?>
-                <?= Html::submitButton('Send tweet', ['class' => 'btn btn-primary']) ?>
-                <?php
-                ActiveForm::end();
-                ?>
-
-            </div>
-        </div>
-    </div>
-</section>
-
-<?php
-}
-?>
-
 <?php foreach ($tweets as $tweet){?>
 <section class="blog-post">
     <div class="panel panel-default">
