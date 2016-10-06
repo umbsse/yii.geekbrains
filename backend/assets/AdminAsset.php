@@ -25,6 +25,7 @@ class TweetAsset extends AssetBundle
 
     ];
     public $js = [
+        'js/demo-rtl.js',
         'js/demo-skin-changer.js',
         'js/jquery.nanoscroller.min.js',
         'js/jquery.maskedinput.min.js',
