@@ -236,7 +236,7 @@ class UserController extends Controller
 
         if ($id) {
 
-            $tweets = Tweets::getTweets($id);
+            $tweets = Tweets::getUserTweets($id);
 
             $is_subscribed = Subscribe::isSubscribed(Yii::$app->user->id,$id);
 

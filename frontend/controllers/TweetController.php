@@ -45,7 +45,21 @@ class TweetController extends Controller
 
         $model = new Tweets();
 
+        return $this->render('index',[
+            'tweets' => $tweets,
+            'model'=> $model
+
+        ]);
+    }
+
+    public function actionAddTweet(){
+
+        $tweets = Tweets::getAllTweets();
+
+        $model = new Tweets();
+
         $post = Yii::$app->request->post("Tweets");
+
         if($post){
 
             $model->text = $post["text"];
@@ -57,14 +71,14 @@ class TweetController extends Controller
             }
         }
 
-        return $this->render('index',[
+        return $this->render('add-tweet',[
             'tweets' => $tweets,
             'model'=> $model
 
         ]);
+
+
     }
-
-
 
     public function actionOne()
     {

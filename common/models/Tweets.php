@@ -58,7 +58,7 @@ class Tweets extends \yii\db\ActiveRecord
     }
 
 
-    public static function getTweets($user_id)
+    public static function getUserTweets($user_id)
     {
 
         return static::find()
@@ -80,7 +80,22 @@ class Tweets extends \yii\db\ActiveRecord
     public static function getTweetsWithSubscribe($user_id)
     {
 
-        $where_str = 'user_id='.$user_id;
+        $query = static::find()->joinWith('user')->where(['user_id' => $user_id]);
+
+        $subscribed = Subscribe::getSubscribe($user_id);
+
+        if ($subscribed){
+            foreach ($subscribed as $s){
+
+                $query = $query->orWhere(['user_id' => $s['subscribe_user_id']]);
+            }
+
+        }
+
+        return $query->orderBy(['published' => SORT_DESC])->all();
+
+
+        /*$where_str = 'user_id='.$user_id;
 
         $subscribed = Subscribe::getSubscribe($user_id);
 
@@ -95,7 +110,7 @@ class Tweets extends \yii\db\ActiveRecord
         return static::find()
             ->joinWith('user')
             ->where($where_str)
-            ->all();
+            ->all();*/
     }
 
 

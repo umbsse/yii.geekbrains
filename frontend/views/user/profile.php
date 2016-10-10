@@ -29,22 +29,26 @@ $this->title = $user->username.' Tweets';
                      <blockquote>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
                         </blockquote>
-
-
-
                     <div class="row">
                         <div class="col-md-4">
-                            <img src="img/technology/unsplash-1.jpg" class="img-responsive" />
+                            <img src="/img/technology/unsplash-1.jpg" class="img-responsive" />
                         </div>
                         <div class="col-md-4">
-                            <?php if (!$is_subscribed) { ?>
-                                <a class="btn btn-info" href="<?= Url::to(['user/subscribe', 'id' => $user->id]) ?>">Subscribe</a>
-                                <?php
-                            }
-                            else{?>
+                            <?php if($user->id === Yii::$app->user->id){?>
+                                <h3>My Profile</h3>
 
-                                <a class="btn btn-info" href="<?= Url::to(['user/unsubscribe', 'id' => $user->id]) ?>">UnSubscribe</a>
                             <?php
+                            }
+                            else{
+                                if (!$is_subscribed) { ?>
+                                    <a class="btn btn-info" href="<?= Url::to(['user/subscribe', 'id' => $user->id]) ?>">Subscribe</a>
+                                    <?php
+                                }
+                                else{?>
+
+                                    <a class="btn btn-info" href="<?= Url::to(['user/unsubscribe', 'id' => $user->id]) ?>">UnSubscribe</a>
+                                <?php
+                                }
                             }
                             ?>
                         </div>

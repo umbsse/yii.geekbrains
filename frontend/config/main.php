@@ -1,4 +1,5 @@
 <?php
+use yii\helpers\Url;
 $params = array_merge(
     require(__DIR__ . '/../../common/config/params.php'),
     require(__DIR__ . '/../../common/config/params-local.php'),
@@ -36,14 +37,26 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
+
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                '<action:(logout|login|signup|feed)>' => 'user/<action>',
+                'profile/<id:\d+>' => 'user/profile',
+                'add' => '/tweet/add-tweet',
+                'index' => 'tweet/index',
+                'tweet/<id:\d+>'=> 'tweet/one',
+                //'static/<act:\w+>'=>'StaticPages/default/<act:>',
+                '<static:[\a-z0-9_-]+>' => Url::to('StaticPages/default/index'),
             ],
         ],
-        */
+
+    ],
+    'modules' => [
+        'StaticPages' => [
+            'class' => 'app\modules\StaticPages\StaticPagesModule',
+        ],
     ],
     'params' => $params,
     'defaultRoute' => 'tweet/index'

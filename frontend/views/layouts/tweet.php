@@ -29,7 +29,7 @@ TweetAsset::register($this);
 
 <div class="navbar navbar-material-blog navbar-primary navbar-absolute-top">
 
-    <div class="navbar-image" style="background-image: url('img/technology/unsplash-6.jpg');background-position: center 40%;"></div>
+    <div class="navbar-image" style="background-image: url('/img/technology/unsplash-6.jpg');background-position: center 40%;"></div>
 
     <div class="navbar-wrapper container">
         <div class="navbar-header">
@@ -38,14 +38,22 @@ TweetAsset::register($this);
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.php"><i class="material-icons">&#xE871;</i> Yii2 Tweets</a>
+            <a class="navbar-brand" href="<?= Url::to(['/tweet/index']) ?>"><i class="material-icons">&#xE871;</i> Yii2 Tweets</a>
         </div>
 
         <div class="navbar-collapse collapse navbar-responsive-collapse">
             <ul class="nav navbar-nav">
+                <?php
+                if (!Yii::$app->user->isGuest) { ?>
                 <li class="active dropdown">
-                    <a href="<?=Url::to(['user/feed']) ?>">My Feed </a>
+                        <a href="<?= Url::to(['/user/feed']) ?>">My Feed </a>
                 </li>
+                <li class="active dropdown">
+                        <a href="<?= Url::to(['/tweet/add-tweet']) ?>">Add Tweet </a>
+                </li>
+                <?php
+                }
+                ?>
                 <li class="dropdown">
                     <a href="bootstrap-elements.html" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Filters <b class="caret"></b></a>
                     <ul class="dropdown-menu">
@@ -83,12 +91,12 @@ TweetAsset::register($this);
                 <li><a href="#"><i class="fa fa-twitter"></i></a></li>---->
                 <?php
                 if (Yii::$app->user->isGuest) {?>
-                    <li><a href="<?= \yii\helpers\Url::to(['user/signup']) ?>"> <b>Signup</b></a></li>
-                    <li><a href="<?= \yii\helpers\Url::to(['user/login']) ?>"> <b>Login</b></a></li>
+                    <li><a href="<?= \yii\helpers\Url::to(['/user/signup']) ?>"> <b>Signup</b></a></li>
+                    <li><a href="<?= \yii\helpers\Url::to(['/user/login']) ?>"> <b>Login</b></a></li>
                 <?php
                 } else {
                 ?>
-                    <li><a href="<?= \yii\helpers\Url::to(['user/logout']) ?>" data-method="post"><b> Logout <?=Yii::$app->user->identity->username ?> </b></a></li>
+                    <li><a href="<?= \yii\helpers\Url::to(['/user/logout']) ?>" data-method="post"><b> Logout <?=Yii::$app->user->identity->username ?> </b></a></li>
                 <?php
                 }
                 ?>
