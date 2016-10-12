@@ -1,7 +1,7 @@
 <?php
 
 /* @var $this yii\web\View */
-/* @var $tweets \common\models\Tweet[]*/
+/* @var $tweets \common\models\Tweets[]*/
 
 use yii\helpers\Html;
 use frontend\assets\TweetAsset;
@@ -29,7 +29,7 @@ $this->title = 'Yii Tweets';
                 </a>
                 <a class="btn btn-info" href="<?=Url::to(['tweet/one','id'=>$tweet->id]) ?>">Read more</a>
                 <a class="blog-post-share pull-right" href="#">
-                    <i class="material-icons">&#xE80D;</i>
+                    <i class="fa fa-thumbs-up fa-2x" aria-hidden="true"></i>
                 </a>
             </div>
         </div>

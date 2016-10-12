@@ -42,6 +42,7 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'like'=>'ajax/like',
                 '<action:(logout|login|signup|feed)>' => 'user/<action>',
                 'profile/<id:\d+>' => 'user/profile',
                 'add' => '/tweet/add-tweet',

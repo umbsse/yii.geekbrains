@@ -13,12 +13,15 @@ use Yii;
  * @property integer $user_id
  *
  * @property User $user
+ * @property Like $like
  */
 class Tweets extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
+    public $like_count;
+
     public static function tableName()
     {
         return '{{%tweets}}';
@@ -57,6 +60,10 @@ class Tweets extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
+    public function getLike()
+    {
+        return $this->hasOne(Like::className(), ['tweet_id' => 'id']);
+    }
 
     public static function getUserTweets($user_id)
     {
@@ -73,6 +80,9 @@ class Tweets extends \yii\db\ActiveRecord
 
         return static::find()
             ->joinWith('user')
+            ->joinWith('like')
+            ->addSelect(static::tableName().'.*, COUNT(tweet_id) AS like_count')
+            ->groupBy(static::tableName().'.id')
             ->orderBy(['published' => SORT_DESC])
             ->all();
     }

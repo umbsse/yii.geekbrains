@@ -13,6 +13,42 @@ use common\models\Tweets;
 
 $this->title = 'Yii Tweets';
 
+$like_url = Url::to(['ajax/like']);
+
+
+$this->registerJs(<<<JS
+    $(".like-btn").click(
+        function() {
+            $.ajax(
+                {
+                    url : "{$like_url}",
+                    type : "POST",
+                    data : {id: $(this).data("id")},
+                    dataType: 'json',
+                    context: $(this)
+                }
+                
+            ).done(
+                function(msg) {
+                    if(msg.status =="success"){                        
+
+                        var like = $(this).children("i");
+                        like.text(msg.like_count);
+                        if (msg.like){
+                            like.removeClass("not-liked");
+                            like.addClass("liked");
+                        }
+                        else{
+                            like.removeClass("liked");
+                            like.addClass("not-liked");
+                        }
+                    }
+                }
+            );
+        }
+    );
+JS
+);
 
 ?>
 
@@ -29,10 +65,24 @@ $this->title = 'Yii Tweets';
                 <a href="<?=Url::to(['tweet/one','id'=>$tweet->id]) ?>">
                     <h2 class="blog-post-title"><?= $tweet->text?></h2>
                 </a>
-                <a class="btn btn-info" href="<?=Url::to(['tweet/one','id'=>$tweet->id]) ?>">Read more</a>
-                <a class="blog-post-share pull-right" href="#">
-                    <i class="material-icons">&#xE80D;</i>
-                </a>
+                <a class="btn btn-info" href="<?=Url::to(['tweet/one','id'=>$tweet->id]) ?>">Read more </a>
+                <!-------<a class="blog-post-share pull-right like-btn" href="#">
+                    <i class="fa fa-thumbs-up fa-2x liked" aria-hidden="true"></i>
+                </a>---------->
+                <button class="btn like-btn pull-right" data-id="<?=$tweet->id ?>">
+
+                    <?php
+                    if($tweet->like["tweet_id"]){?>
+
+                        <i class="fa fa-thumbs-up fa-2x liked" aria-hidden="true"><?= $tweet->like_count?></i>
+                    <?php
+                    }
+                    else
+                    {?>
+                        <i class="fa fa-thumbs-up fa-2x not-liked" aria-hidden="true"><?= $tweet->like_count?></i>
+                    <?php
+                    }?>
+                </button>
             </div>
         </div>
     </div>
