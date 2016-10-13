@@ -89,10 +89,10 @@ class UsersController extends Controller
 
         if (($id)&&($confirm === 'yes')) {
 
-            foreach ($tweets as $t){
+            /*foreach ($tweets as $t){
 
                 $t->delete();
-            }
+            }*/
 
             $user->delete();
             return $this->redirect(Url::to(['users/index']));

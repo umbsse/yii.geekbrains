@@ -108,7 +108,7 @@ class Like extends \yii\db\ActiveRecord
 
         if ($user_id === null) $user_id = Yii::$app->user->id;
 
-        return self::find()->where(['user_id'=>$user_id,'tweet_id'=>$tweet_id])->one();
+        return static::find()->where(['user_id'=>$user_id,'tweet_id'=>$tweet_id])->one();
     }
 
     public static function addLike($tweet_id, $user_id = null){
@@ -116,7 +116,7 @@ class Like extends \yii\db\ActiveRecord
         if (Yii::$app->user->isGuest) return false;
         if ($user_id === null) $user_id = Yii::$app->user->id;
 
-        if(!self::isLikeExist($tweet_id, $user_id)) {
+        if(!static::isLikeExist($tweet_id, $user_id)) {
 
 
                 $like = new Like();
@@ -134,7 +134,7 @@ class Like extends \yii\db\ActiveRecord
         if (Yii::$app->user->isGuest) return false;
         if ($user_id === null) $user_id = Yii::$app->user->id;
 
-        $like = self::isLikeExist($tweet_id, $user_id);
+        $like = static::isLikeExist($tweet_id, $user_id);
         if($like) {
             $like->delete();
             return true;
@@ -144,7 +144,7 @@ class Like extends \yii\db\ActiveRecord
 
     public static function likeCount($tweet_id){
 
-        return self::find()->where(['tweet_id'=>$tweet_id])->count();
+        return static::find()->where(['tweet_id'=>$tweet_id])->count();
     }
 
 
